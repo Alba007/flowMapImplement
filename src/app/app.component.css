@@ -1,0 +1,10 @@
+.tabela {
+    position: relative;
+    right: 2px;
+    top: 800px; 
+    width:30px ;
+    height: 30px;
+    z-index: 99999;
+    margin-left: auto;
+    background-color: white
+}

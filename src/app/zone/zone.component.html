@@ -1,0 +1,78 @@
+<!-- <h2 mat-dialog-title>{{(modify ?'modifyZoneDetails':'createNewZone')|translate}}</h2>
+<mat-divider class="title-divider"></mat-divider> -->
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{(modify ?'modifyZoneDetails':'createNewZone')|translate}}</mat-card-title>
+    <mat-card-subtitle>
+      <mat-divider class="title-divider"> </mat-divider>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div style="width: 100%" *ngIf="modify">
+      <button mat-fab class="circle" (click)="close()">
+        <mat-icon class="addIcon"> clear </mat-icon>
+      </button>
+      <button mat-fab class="circle" title="{{'save'|translate}}" (click)="saveAndClose()"
+        [ngStyle]="{'opacity' : zoneForm.valid ? '1' : '0.35'}">
+        <mat-icon class="addIcon"> check </mat-icon>
+      </button>
+    </div>
+    <!--<mat-toolbar>-->
+    <!--<h2>{{ modify ?'Modify Zone Details':'Create New Zone' }}</h2>-->
+    <!--</mat-toolbar>-->
+    <form [formGroup]="zoneForm">
+      <div class="row">
+        <div class="col-6">
+          <div class="example-container">
+            <ul style="list-style: none;">
+              <li>
+                <mat-form-field>
+                  <input matInput placeholder="{{'name'|translate}}" id="name" formControlName="name" required
+                    minlength="3" updateOn="blur">
+                  <mat-error *ngIf="f.name.errors?.required">{{'nameIsRequired'|translate}}
+                  </mat-error>
+                  <mat-error *ngIf="f.name.errors?.minlength">
+                    {{'nameShouldBeLongerThen3characters'|translate}}
+                  </mat-error>
+                </mat-form-field>
+              </li>
+              <li>
+                <section>
+                  <!--<textarea class="md-textarea form-control" matInput placeholder="Area GeoJSON" id="area"-->
+                  <!--formControlName="area" required-->
+                  <!--updateOn="blur" rows='10' cols='40'>-->
+                  <!--</textarea>-->
+                  <td-code-editor style="height:415px" theme="vs-dark" required [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="areaSpace" flex automaticLayout language="json">
+                  </td-code-editor>
+                </section>
+              </li>
+              <li>
+                <button mat-button (click)="show()">{{'draw'|translate}} {{'zone'|translate}}</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-6">
+          <div>
+            <div leaflet [leafletOptions]="options" class="leafletMap" [leafletLayers]="layers"
+              (leafletMapReady)="onMapReady($event)">
+              <div *ngIf="hasDraw" leafletDraw [leafletDrawOptions]="drawOptions"></div>
+              <div *ngIf="!hasDraw" leafletDraw [leafletDrawOptions]="drawOptions"></div>
+              <!--@TODO zone selection here -->
+            </div>
+
+
+            <div  style="margin-top: 10px;" *ngIf="!modify">
+              <button mat-button (click)="close()" color="primary">{{'cancel'|translate}}</button>
+              <button mat-button [disabled]="!zoneForm.valid" (click)="saveAndClose()" color="warn">
+                {{'save'|translate}}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
